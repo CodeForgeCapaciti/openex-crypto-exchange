@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: openex-backend
+  main:
+    allow-circular-references: true  # Allow circular references as fallback
+  datasource:
+    url: jdbc:postgresql://localhost:5432/openex
+    username: postgres
+    password: Paidgame@72
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    redis:
+      host: localhost
+      port: 6379
+    # Disable Redis repositories to avoid scanning conflicts
+    redis.repositories.enabled: false
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:openex-secret-key-for-jwt-tokens-please-change-in-production-2024}
+  expiration: 86400000
+
+logging:
+  level:
+    com.cryptoBackend.backend: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+openex:
+  trading:
+    fee-rate: 0.001
+    min-order-amount: 10.0
+    max-order-amount: 100000.0
