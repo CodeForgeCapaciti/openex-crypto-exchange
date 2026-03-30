@@ -41,5 +41,13 @@ public class OrderController {
                 .collect(Collectors.toList()));
     }
 
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> cancelOrder(@PathVariable String orderId,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        orderService.cancelOrder(orderId, user.getId());
+        return ResponseEntity.ok().build();
+    }
+
 
 }
