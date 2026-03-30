@@ -30,5 +30,14 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getUsername()));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
 
+        User user = userService.findByEmail(request.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
+        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getUsername()));
+    }
 }
